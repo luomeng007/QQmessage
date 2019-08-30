@@ -1,0 +1,48 @@
+# -*- coding: utf-8 -*-
+
+'''
+Sending message to a specific person in QQ list.
+'''
+import win32gui
+import win32con
+import win32clipboard as w
+import os
+import time
+
+def getText():
+    w.OpenClipboard()
+    d = w.GetClipboardData(win32con.CF_UNICODETEXT)
+    w.CloseClipboard()
+    return d
+
+def setText(aString):
+    w.OpenClipboard()
+    w.EmptyClipboard()
+    w.SetClipboardData(win32con.CF_UNICODETEXT, aString)
+    w.CloseClipboard()
+
+def send_qq(to_who, msg):
+    setText(msg)
+
+    qq = win32gui.FindWindow(None, to_who)
+    print(qq)
+
+    win32gui.SendMessage(qq, 258, 22, 2080193)
+    win32gui.SendMessage(qq, 770, 0, 0)
+
+    win32gui.SendMessage(qq, win32con.WM_KEYDOWN, win32con.VK_RETURN, 0)
+    win32gui.SendMessage(qq, win32con.WM_KEYUP, win32con.VK_RETURN, 0)
+
+os.startfile(r"D:\tools\QQ\QQ\Bin\QQ.exe")
+
+time.sleep(10)
+
+to_who=u'对方昵称'
+msg=u'我不知道'
+
+clientDict = {'对方昵称':'QQ号码'}
+os.system('start tencent://message/?uin=' + clientDict[to_who])
+
+time.sleep(2)
+
+send_qq(to_who, msg)
